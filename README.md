@@ -2,7 +2,7 @@
 
 This was a project to extend the results of the [Geometry of Truth](https://arxiv.org/abs/2310.06824) paper, which found that LLMs represent the truth of a statement, such as "Chicago is in Canada", as a single direction in the space of its final hidden layer. I explored whether the "descriptive" representation of truth would also be "prescriptive": whether it could be used to steer the model in response to being challenged in its response to a math question. I ran the study with the reasoning model DeepSeek-R1-Distill-Qwen-14B, and used the [MATH](https://github.com/hendrycks/math) dataset of math problems. I built on the [Thought Anchors](https://github.com/interp-reasoning/thought-anchors) paper, which, for the purposes of this study, provided sample correct and incorrect answers to the MATH problems from the DeepSeek model.
 
-I built two versions of a possible truth direction, both leveraging the difference-in-mean from a true and false population of tokens. The first used the same Geometry of Truth true and false statements. Since these are provided as outside text provided to the model (as in a prompt), I refer to it as the "Outside Truth" direction.
+I built two versions of a possible truth direction, both leveraging the difference-in-mean from a true and false population of tokens. The first posed one of the MATH problems, and then provided an answer (either true or false). This prompting mirrored that of the Geometry of Truth paper. Since these are provided as outside text provided to the model (as in a prompt), I refer to it as the "Outside Truth" direction.
 
 <img src="figures/fig1_outside_truth_pca.png" alt="Outside Truth PCA" width="450">
 
