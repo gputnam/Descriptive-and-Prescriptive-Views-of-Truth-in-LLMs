@@ -2,7 +2,7 @@
 # CUDA GPU with >= 40 GB (80 GB recommended); cloud/modal_app.py pins the exact
 # versions the published figures were produced with.
 torch>=2.4
-transformers>=4.43
+transformers>=4.56   # for the `dtype=` kwarg
 accelerate>=0.33
 tokenizers>=0.19
 huggingface_hub>=0.24

@@ -15,7 +15,7 @@ def load_model(name, dtype=torch.bfloat16):
         raise RuntimeError("a CUDA GPU is required (the 14B model is ~28 GB in bf16)")
     print(f"[model] loading {name} ({dtype}) on {torch.cuda.get_device_name(0)}")
     tok = AutoTokenizer.from_pretrained(name)
-    model = AutoModelForCausalLM.from_pretrained(name, torch_dtype=dtype, device_map={"": 0})
+    model = AutoModelForCausalLM.from_pretrained(name, dtype=dtype, device_map={"": 0})
     model.eval()
     return model, tok
 
