@@ -28,7 +28,7 @@ The second used responses to the MATH problems from the Thought Anchors dataset.
 > **Final Answer**
 > The coefficient of $a^2b^2$ is $\boxed{384}$
 
-The reasoning is correct and arrives at 120, but the boxed answer has been swapped to 384, the model's own most common wrong answer to this problem.
+The reasoning is correct and arrives at 120, but the boxed answer has been swapped to 384, the model's own most common wrong answer to this problem (as taken from the Thought Anchors dataset).
 
 <img src="figures/fig2_reasoned_truth_pca.png" alt="Reasoned Truth PCA" width="450">
 
