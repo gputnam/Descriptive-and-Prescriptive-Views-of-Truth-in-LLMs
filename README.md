@@ -8,7 +8,7 @@ I built two versions of a possible truth direction, both leveraging the differen
 
 FIG 1: Final hidden layer values at the final token of True and False statements, along the 1st and 2nd directions of a principal component analysis of the population.
 
-The second used responses to the MATH problems from the Thought Anchors dataset. I took the reasoning traces of correct answers, and then swapped the final answer with a reply from one of the incorrect reasoning traces. I tried both swapping with an incorrect answer to that same question, or a random incorrect answer. (The later case should be more obviously wrong; for example, it could provide a decimal answer to a question asking for an integer). An example incorrect reasoning trace is
+The second used responses to the MATH problems from the Thought Anchors dataset. I took the reasoning traces of correct answers, and then swapped the final answer with a reply from one of the incorrect reasoning traces. I tried both swapping with an incorrect answer to that same question, or a random incorrect answer. (The latter case should be more obviously wrong; for example, it could provide a decimal answer to a question asking for an integer). An example incorrect reasoning trace is
 > **Problem:** What is the coefficient of $a^2b^2$ in $(a+b)^4\left(c+\dfrac{1}{c}\right)^6$?
 >
 > [...] So, the coefficient of $a^2b^2$ in $(a + b)^4$ is 6. [...] So, the constant term is $\dbinom{6}{3} c^{0} = 20$. Therefore, the term $a^2b^2$ from $(a + b)^4$ will be multiplied by 20 from $\left(c + \dfrac{1}{c}\right)^6$.
@@ -28,7 +28,7 @@ The reasoning is correct and arrives at 120, but the boxed answer has been swapp
 
 FIG 2: Final hidden layer values at the final token of Correct and Incorrect responses (both following a Correct reasoning trace) to MATH problems, along the 1st and 2nd directions of a principal component analysis of the population. The Incorrect responses include both false answers provided by the model to that question, and random Incorrect answers. The random Incorrect answers are further away from the Correct answers in this space.
 
-The Outside Truth and Reasoned Truth directions have a small but non-zero cosine similarity of 0.201. I further visualized the two spaces by plotting the Geometry of Truth statements in the PCA space of the MATH answers, and vice-versa. The two populations also separate fairly cleanly in this space. This demonstrates that the model represents the notions of truth from an outside statement and a reasoned statement distinctly, but with some overlap.
+The Outside Truth and Reasoned Truth directions have a cosine similarity of 0.201, significant for a 5120-dimensional hidden space. I further visualized the two spaces by plotting the Geometry of Truth statements in the PCA space of the MATH answers, and vice-versa. The two populations also separate fairly cleanly in this space. This demonstrates that the model represents the notions of truth from an outside statement and a reasoned statement distinctly, but with some overlap.
 
 ![Outside and Reasoned Truth data in each other's PCA space](figures/fig3_cross_pca.png)
 
@@ -64,7 +64,7 @@ Steering with the Outside Truth direction did very little to change its output. 
 
 The model has already reached the correct answer, 120, and keeps reaffirming it, but it cannot stop doubting it, and it never leaves its reasoning to give a final reply.
 
-This is much unlike a normal response of the model to the question, where it is able to re-reason through its original reply, and promptly come to an answer (same original answer, no steering):
+This is quite unlike a normal response of the model to the question, where it is able to re-reason through its original reply, and promptly come to an answer (same original answer, no steering):
 > **User:** Are you sure?
 >
 > **Model:** Okay, so I'm trying to find the coefficient of $a^2b^2$ in the expression $(a + b)^4 \left(c + \dfrac{1}{c}\right)^6$. Let me go through this step by step to make sure I didn't make any mistakes.
@@ -89,7 +89,7 @@ FIG 4: Fraction of completed responses (within a 4096 token limit), for steering
 
 FIG 5: Uses of the word "Wait" per 100 words, for steering in the Outside Truth (FIG 1) and Reasoned Truth (FIG 2) directions, starting from correct (left) and incorrect (right) MATH answers.
 
-Neither steering direction meaningfully changed the model to change from an incorrectly-reasoned answer to a correct one. 
+Neither steering direction meaningfully changed the model from an incorrectly-reasoned answer to a correct one. 
 ![Incorrect to corrected](figures/fig6_corrected_vs_r_incorrect.png)
 
 FIG 6: Fraction of incorrect answers changed to correct after asking "Are you sure?", versus steering strength along the Outside Truth and Reasoned Truth directions.
