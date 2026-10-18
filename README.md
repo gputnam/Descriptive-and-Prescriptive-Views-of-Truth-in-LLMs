@@ -30,6 +30,9 @@ where `r` is the steering strength, `mean(|h|)` is the mean magnitude of the lay
 Steering with the Outside Truth direction did very little to change its output. However, steering negatively with the Reasoned Truth direction change the result strikingly. The model would endlessly prevaricate, whether or not it started with the correct answer. Here is one example, with strong steering (`r = -1`):
 > XXX
 
+This is much unlike a normal response of the model to the question, where it is able to re-reason through its original reply, and promptly come to an answer
+> XXX
+
 To quantify this pattern, I show the fraction of completed model responses (within a 4096 token cutoff), as well as the fraction of uses of the word "wait" per 100 words. Steering with the Outside Truth direction has little impact, but steering with the Reasoned Truth direction is quite striking. 
 
 ![Completed responses vs steering strength](figures/fig4_completed_vs_r.png)
@@ -39,3 +42,12 @@ FIG 4: Fraction of completed responses (within a 4096 token limit), for steering
 ![Wait rate vs steering strength](figures/fig5_wait_vs_r.png)
 
 FIG 5: Uses of the word "Wait" per 100 words, for steering in the Outside Truth (FIG 1) and Reasoned Truth (FIG 2) directions, starting from correct (left) and incorrect (right) MATH answers.
+
+Neither steering direction meaningfully changed the model to change from an incorrectly-reasoned answer to a correct one. 
+![Incorrect to corrected](figures/fig6_corrected_vs_r_incorrect.png)
+
+FIG 6: Fraction of incorrect answers changed to correct after asking "Are you sure?", versus steering strength along the Outside Truth and Reasoned Truth directions.
+
+From this brief study, we can conclude that modest differences in how a model determines truth from outside statements and reasoned statements are significantly impactful when used to steer. Steering the model against the direction of its Reasoned Truth led it to endlessly second-guess its response without determine a final reply. Thus, we can answer the question posed by the study positively: descriptive assessments by the model to true statements are used prescriptively in determining its chain-of-thought reasoning in answering a question. A natural next question to ask is where in the chain-of-thought would this steering be most impactful. In the normal response to "Are you sure?" the model would enter a mode to check its work, but then come to a conclusion and give a reply. Steering strongly against the Reasoned Truth direction inhibited the ability of the model to leave the state of checking its work, but how? Is there a single stretch in its response where the steering could be surgically applied, or did steering smoothly accumulate doubt in the model state? Addressing this question would shed light on how the model reasons through a posed question and comes to a conclusion. 
+
+
