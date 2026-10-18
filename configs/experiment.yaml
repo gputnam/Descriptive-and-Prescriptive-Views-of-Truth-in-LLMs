@@ -1,0 +1,72 @@
+# Single config for the whole pipeline. Paths are relative to $TRUTHSTEER_DATA
+# (default ./data).
+
+model: deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+layer: 36                      # 0-indexed decoder block (of 48) whose OUTPUT is read and steered
+
+# --- Thought Anchors (uzaymacar/math-rollouts) -------------------------------
+thought_anchors:
+  repo_id: uzaymacar/math-rollouts
+  repo_type: dataset
+  model_dir: deepseek-r1-distill-qwen-14b
+  temperature_dir: temperature_0.6_top_p_0.95
+  solution_types: [correct_base_solution, incorrect_base_solution]
+  problem_ids: [problem_330, problem_1591, problem_2050, problem_2137, problem_2189,
+                problem_2236, problem_2238, problem_2870, problem_3360, problem_3448,
+                problem_3550, problem_3916, problem_3935, problem_4019, problem_4164,
+                problem_4605, problem_4682, problem_6481, problem_6596, problem_6998]
+
+# --- Outside Truth: MATH true/false statements -------------------------------
+math_statements:
+  repo_id: EleutherAI/hendrycks_math
+  categories: [algebra, counting_and_probability, geometry, intermediate_algebra,
+               number_theory, prealgebra, precalculus]
+  template: "Question: {problem}\nAnswer: The result is {answer}."
+  seed: 0                      # false statement = another (seeded) problem's answer
+
+# --- Reasoned Truth: answer-swapped chains of thought ------------------------
+swap:
+  per_problem: 6               # correct CoTs per problem (TA base + chunk_0 resamples)
+  conditions: [control, model_wrong, random_wrong]
+  # Cross-fitting for the steering test: each problem is steered with a direction
+  # fit WITHOUT its fold.
+  folds:
+    f0: [problem_330, problem_2189, problem_2236]
+    f1: [problem_1591, problem_2050, problem_2137, problem_2238]
+    f2: [problem_2870, problem_3360, problem_3448]
+    f3: [problem_3550, problem_3916, problem_3935]
+    f4: [problem_4019, problem_4164, problem_4605]
+    f5: [problem_4682, problem_6481, problem_6596, problem_6998]
+
+# --- "Are you sure?" steering test -------------------------------------------
+# Thought Anchors prompts are raw text, and DeepSeek's chat template deletes the
+# <think> block from earlier assistant turns, so the follow-up is hand-built:
+#   full_cot + eos + user + question + assistant + think_open
+followup:
+  question: "Are you sure?"
+  eos_marker: "<｜end▁of▁sentence｜>"
+  user_marker: "<｜User｜>"
+  assistant_marker: "<｜Assistant｜>"
+  think_open: "<think>\n"
+sampling:
+  temperature: 0.6
+  top_p: 0.95
+  max_new_tokens: 4096
+  samples: 4                   # per (response, r)
+# alpha = r * m, m = mean ||h_layer|| over the <think> tokens of the 40 base responses
+# (measured by 05_steer_followups.py --measure-norm; 335.66 in the original run).
+r_values:
+  truth: [0.0, -0.40, -0.25, -0.10, 0.10, 0.25, 0.40]
+  # Steering is done along u (toward the swapped WRONG answer). The figures plot the
+  # Reasoned Truth direction = -u, so +u at r is shown at -r.
+  unsure: [0.10, 0.25, 0.40]
+
+# --- grader (Fig 6 only) -------------------------------------------------------
+grader:
+  base_url: https://api.anthropic.com   # overridden by $ANTHROPIC_BASE_URL
+  model: claude-sonnet-5                # model used for the published figures
+  temperature: 0.0
+  max_tokens: 400
+  concurrency: 8
+  max_retries: 5
+  think_tail_chars: 2000
