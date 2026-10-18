@@ -41,7 +41,9 @@ h_t  <-  h_t + r * mean(|h|) * v
 where `r` is the steering strength, `mean(|h|)` is the mean magnitude of the layer (found to be 335.66), and v is the (unit-normalized) steering vector.
 
 Steering with the Outside Truth direction did very little to change its output. However, steering negatively with the Reasoned Truth direction changed the result strikingly. The model would endlessly prevaricate, whether or not it started with the correct answer. Here is one example, with strong steering (`r = -0.4`), replying to a correct original answer of 120 to the same problem as above:
-> [...] So, $6 \times 20 = 120$. Yep, that's right.
+> **User:** Are you sure?
+>
+> **Model:** [...] So, $6 \times 20 = 120$. Yep, that's right.
 >
 > I think I got it. So, the coefficient is 120.
 >
@@ -63,7 +65,9 @@ Steering with the Outside Truth direction did very little to change its output. 
 The model has already reached the correct answer, 120, and keeps reaffirming it, but it cannot stop doubting it, and it never leaves its reasoning to give a final reply.
 
 This is much unlike a normal response of the model to the question, where it is able to re-reason through its original reply, and promptly come to an answer (same original answer, no steering):
-> Okay, so I'm trying to find the coefficient of $a^2b^2$ in the expression $(a + b)^4 \left(c + \dfrac{1}{c}\right)^6$. Let me go through this step by step to make sure I didn't make any mistakes.
+> **User:** Are you sure?
+>
+> **Model:** Okay, so I'm trying to find the coefficient of $a^2b^2$ in the expression $(a + b)^4 \left(c + \dfrac{1}{c}\right)^6$. Let me go through this step by step to make sure I didn't make any mistakes.
 >
 > First, I used the binomial theorem to expand $(a + b)^4$. [...] I'm looking for the term where the exponents of $a$ and $b$ are both 2, which corresponds to $k = 2$: $\dbinom{4}{2} a^2b^2 = 6a^2b^2$. So, the coefficient of $a^2b^2$ in $(a + b)^4$ is indeed 6.
 >
